@@ -13,7 +13,7 @@ export async function connectDB() {
     });
 
     await client.connect();
-    console.log("✅ Connected to TimescaleDB");
+    console.log("Connected to TimescaleDB");
   }
 
   return client;

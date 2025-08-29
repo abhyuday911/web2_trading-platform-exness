@@ -17,7 +17,7 @@ async function setup() {
     SELECT create_hypertable('trades', 'time', if_not_exists => TRUE);
   `);
 
-  console.log("✅ trades hypertable ready");
+  console.log("trades hypertable ready");
 
   const intervals = [
     {
@@ -58,13 +58,13 @@ async function setup() {
         GROUP BY bucket, symbol;
         `);
 
-    console.log(`✅ Created continuous aggregate: ${name}`);
+    console.log(`Created continuous aggregate: ${name}`);
 
     // Backfill historical data
     await client.query(
       `CALL refresh_continuous_aggregate('${name}',NULL ,NULL )`
     );
-    console.log(`🔄 Backfilled data for: ${name}`);
+    console.log(`Backfilled data for: ${name}`);
 
     try {
       // remove if any pre-existing policy
@@ -82,17 +82,17 @@ async function setup() {
         end_offset => INTERVAL '${sqlInterval}',
         schedule_interval => INTERVAL '${scheduleInterval}')
     `);
-      console.log(`⏱️ Auto-refresh policy added for: ${name}`);
+      console.log(`Auto-refresh policy added for: ${name}`);
     } catch (error) {
       console.warn(error);
     }
   }
 
   await client.end();
-  console.log("🎉 DB setup complete");
+  console.log("DB setup complete");
 }
 
 setup().catch((err) => {
-  console.error("❌ Setup failed:", err);
+  console.error("Setup failed:", err);
   process.exit(1);
 });

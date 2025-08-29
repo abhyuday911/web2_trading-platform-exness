@@ -14,7 +14,7 @@ sub.subscribe("trades", () => {
 });
 
 sub.on("message", (channel, message) => {
-  console.log("Redis message received:", message); // 👈 test send
+  console.log("Redis message received:", message);
   if (channel === "trades") {
     wss.clients.forEach((client) => {
       if (client.readyState === client.OPEN) {

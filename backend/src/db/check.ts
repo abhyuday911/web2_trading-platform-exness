@@ -6,7 +6,7 @@ async function checkDB() {
   console.log("=== Checking Trades Table ===");
   const trades = await client.query("SELECT * FROM trades ORDER BY time DESC LIMIT 50;");
   if (trades.rows.length === 0) {
-    console.log("⚠️ No trades found in trades table.");
+    console.log("No trades found in trades table.");
   } else {
     console.table(trades.rows);
   }
@@ -26,12 +26,12 @@ async function checkDB() {
       );
       console.log(result.rows.length)
       if (result.rows.length === 0) {
-        console.log(`⚠️ No rows found in ${name}.`);
+        console.log(`No rows found in ${name}.`);
       } else {
         console.table(result.rows);
       }
     } catch (err) {
-      console.log(`❌ Could not query ${name}:`, err.message);
+      console.log(`Could not query ${name}:`, err.message);
     }
   }
 
@@ -39,5 +39,5 @@ async function checkDB() {
 }
 
 checkDB().catch((err) => {
-  console.error("❌ Error checking DB:", err);
+  console.error("Error checking DB:", err);
 });

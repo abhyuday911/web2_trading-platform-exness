@@ -18,7 +18,6 @@ const candleQuerySchema = z.object({
   endTime: z.string().optional(),
 });
 
-// ✅ Duration to table mapping
 const durationMap: Record<string, string> = {
   "1m": "candles_1m",
   "15m": "candles_15m",
@@ -26,7 +25,6 @@ const durationMap: Record<string, string> = {
   "1d": "candles_1d",
 };
 
-// ✅ API endpoint
 app.get("/candles", async (req, res) => {
   try {
     const parsed = candleQuerySchema.safeParse(req.query);

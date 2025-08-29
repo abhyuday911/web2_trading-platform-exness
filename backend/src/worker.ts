@@ -10,7 +10,7 @@ async function processQueue() {
 
   while (true) {
     try {
-      const trade = await redis.lpop("trades_queue"); // get one trade
+      const trade = await redis.lpop("trades_queue");
       if (trade) {
         const { symbol, price, qty, time } = JSON.parse(trade);
         // Insert into TimescaleDB
@@ -19,7 +19,7 @@ async function processQueue() {
           [new Date(time), symbol, parseFloat(price), parseFloat(qty)]
         );
 
-        console.log(`✅ Inserted trade: ${symbol} ${price} x ${qty}`);
+        console.log(`Inserted trade: ${symbol} ${price} x ${qty}`);
       } else {
         // If queue empty, wait a bit before retrying
         await new Promise((r) => setTimeout(r, 50));

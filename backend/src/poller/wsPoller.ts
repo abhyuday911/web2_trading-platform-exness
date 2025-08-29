@@ -12,7 +12,7 @@ ws.onmessage = (event) => {
     const trade = JSON.parse(event.data.toString());
 
     if (!trade.s || !trade.p) {
-      console.log("⚠️ Ignored message:", trade);
+      console.log("Ignored message:", trade);
       return;
     }
 
@@ -46,7 +46,7 @@ ws.onmessage = (event) => {
     redis.publish("trades", JSON.stringify(wsPayload));
     redis.rpush("trades_queue", JSON.stringify(payload));
   } catch (err) {
-    console.error("❌ Failed to parse trade:", err);
+    console.error("Failed to parse trade:", err);
   }
 };
 
