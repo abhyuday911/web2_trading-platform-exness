@@ -5,7 +5,7 @@ import { z } from "zod";
 const app = express();
 app.use(express.json());
 const client = await connectDB();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 
 app.get("/index", (req, res) => console.log("first"));
 
@@ -46,7 +46,8 @@ app.get("/candles", async (req, res) => {
         SELECT bucket, symbol, open, high, low, close, volume
         FROM ${tableName}
         WHERE symbol = $1
-        LIMIT 50;
+        ORDER BY bucket DESC
+        LIMIT 100;
       `;
     } else {
       // Fallback: aggregate dynamically from 1m candles

@@ -1,30 +1,31 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { CandlestickSeries, createChart, ISeriesApi } from "lightweight-charts";
+import {
+  CandlestickSeries,
+  createChart,
+  ISeriesApi,
+  UTCTimestamp,
+} from "lightweight-charts";
 import { Candles } from "@/types";
 
-
-
-const data = [
-  { open: 10, high: 10.63, low: 9.49, close: 9.55, time: 1642427876 },
-  { open: 9.55, high: 10.3, low: 9.42, close: 9.94, time: 1642514276 },
-  { open: 9.94, high: 10.17, low: 9.92, close: 9.78, time: 1642600676 },
-  { open: 9.78, high: 10.59, low: 9.18, close: 9.51, time: 1642687076 },
-  { open: 9.51, high: 10.46, low: 9.1, close: 10.17, time: 1642773476 },
-  { open: 10.17, high: 10.96, low: 10.16, close: 10.47, time: 1642859876 },
-  { open: 10.47, high: 11.39, low: 10.4, close: 10.81, time: 1642946276 },
-  { open: 10.81, high: 11.6, low: 10.3, close: 10.75, time: 1643032676 },
-  { open: 10.75, high: 11.6, low: 10.49, close: 10.93, time: 1643119076 },
-  { open: 10.93, high: 11.53, low: 10.76, close: 10.96, time: 1643205476 },
-];
+const timeConversions = {
+  "1m": 1 * 60,
+  "15m": 15 * 60,
+  "1h": 1 * 60 * 60,
+  "1d": 1 * 60 * 60 * 24,
+};
 
 interface Props {
   data: Candles[];
 }
 
-const CandleChart: React.FC<Props> = () => {
+const CandleChart: React.FC<Props> = ({ data }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+
+  const lastCandleRef = useRef<Candles | null>(null);
+
+  const interval = "1m";
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -56,14 +57,52 @@ const CandleChart: React.FC<Props> = () => {
     });
 
     candleSeriesRef.current.setData(data);
-
     chart.timeScale().fitContent();
-  });
+
+    const ws = new WebSocket("ws://localhost:8080");
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+
+      const price = Number(data.bid);
+
+      const tsSec = Math.floor(data.time / 1000); 
+      const timeStamp = Math.floor(tsSec / 60) * 60;
+
+      const candle = {
+        time: timeStamp as UTCTimestamp,
+        open:
+          lastCandleRef.current?.time === timeStamp
+            ? lastCandleRef.current.open
+            : price,
+        low:
+          lastCandleRef.current?.time === timeStamp
+            ? Math.min(price, lastCandleRef.current.low)
+            : price,
+        high:
+          lastCandleRef.current?.time === timeStamp
+            ? Math.max(price, lastCandleRef.current.high)
+            : price,
+        close: price,
+      };
+
+      lastCandleRef.current = candle;
+
+      if (candleSeriesRef.current) {
+        candleSeriesRef.current.update(candle);
+      }
+
+      lastCandleRef.current = candle;
+      if (candleSeriesRef.current) {
+        candleSeriesRef.current.update(candle);
+      }
+    };
+  }, []);
 
   return (
     <div
       ref={chartContainerRef}
-      className="w-3/4 h-full bg-zinc-900 rounded-sm overflow-hidden"
+      className="w-2/3 h-full bg-zinc-900 rounded-sm overflow-hidden"
     ></div>
   );
 };
