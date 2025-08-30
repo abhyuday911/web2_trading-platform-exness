@@ -62,8 +62,6 @@ const CandleChart: React.FC<Props> = ({ data }) => {
     const ws = new WebSocket("ws://localhost:8080");
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
-
       const price = Number(data.bid);
 
       const tsSec = Math.floor(data.time / 1000); 

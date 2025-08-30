@@ -1,3 +1,4 @@
+import User from "@/components/auth/User";
 import CandleChart from "@/components/CandleChart";
 import Instruments from "@/components/Instruments";
 import { BackendCandle, Candles } from "@/types";
@@ -14,6 +15,7 @@ async function getCandles() {
     return res.json();
   } catch (error) {
     console.error(error);
+    return { candles: [] };
   }
 }
 
@@ -35,14 +37,16 @@ const page = async () => {
   const data = await getCandles();
 
   return (
-    <div className="p-4 w-screen h-screen flex  gap-4">
+    <div className="p-4 w-screen h-screen flex gap-4">
       <CandleChart data={transformCandleData(data.candles)} />
       <div className="flex flex-col w-1/3 h-full rounded-sm overflow-hidden gap-2">
-        <div className="w-full h-16 bg-zinc-800"></div>
-        <div className="w-full p-2 mb-1 bg-zinc-800">
+        <div className="w-full p-2 bg-neutral-800 flex items-end justify-end gap-2">
+          <User />
+        </div>
+        <div className="w-full p-2 mb-1 bg-neutral-800">
           <Instruments />
         </div>
-        <div className="h-full w-full bg-zinc-800"></div>
+        <div className="h-full w-full bg-neutral-800"></div>
       </div>
     </div>
   );
