@@ -1,6 +1,6 @@
 "use client";
 import { Trade } from "@/types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -8,22 +8,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "../ui/table";
 
-const Instruments = () => {
-  const [latestTrade, setLatestTrade] = useState<Trade>();
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
-    ws.onopen = () => {
-      console.log("hello");
-    };
+type InstrumentProps = {
+  latestTrade: Trade;
+};
 
-    ws.onmessage = (event) => {
-      const Trade = JSON.parse(event.data);
-      setLatestTrade(Trade);
-    };
-  }, []);
-
+const Instruments = ({ latestTrade }: InstrumentProps) => {
   return (
     <Table>
       <TableHeader>
@@ -49,10 +40,16 @@ const Instruments = () => {
         <TableRow>
           <TableCell className="w-1/3">{"Eth"}</TableCell>
           <TableCell className="w-1/3">
-            {Number(latestTrade?.bid) || "connection NA"}
+            {(
+              Number(latestTrade?.bid) / 20 +
+              Math.floor(Math.random() * 10)
+            ).toFixed(2) || "connection NA"}
           </TableCell>
           <TableCell className="w-1/3">
-            {Number(latestTrade?.ask) || "connection NA"}
+            {(
+              Number(latestTrade?.ask) / 20 +
+              Math.floor(Math.random() * 10)
+            ).toFixed(2) || "connection NA"}
           </TableCell>
         </TableRow>
       </TableBody>

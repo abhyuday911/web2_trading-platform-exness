@@ -29,8 +29,8 @@ export function SignUp({ setLoggedInUser }: SignUpProps) {
         password,
       });
 
-      setLoggedInUser(data.email);
-      console.log(data);
+      setLoggedInUser(data.user);
+      console.log(data.user);
     } catch (error) {
       console.error(error);
     }

@@ -10,12 +10,13 @@ const User = () => {
   const [loggedInUser, setLoggedInUser] = useState<null | User>(null);
 
   useEffect(() => {
+    setLoggedInUser(null)
     const fetchUser = async () => {
       try {
         const { data } = await axios.get("http://localhost:3030/api/me");
         setLoggedInUser(data);
 
-        console.log(data);
+        console.log("16 data", data);
       } catch (error) {
         console.log(error);
       }
@@ -24,14 +25,10 @@ const User = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    console.log(loggedInUser);
-  });
-
   if (loggedInUser) {
     return (
       <div className="flex w-full justify-between p-2">
-        <h1 className="text-green-600">USD: $30,000</h1>
+        <h1 className="text-green-600">USD: {loggedInUser.balance.usd}</h1>
         <h1>{loggedInUser.email}</h1>
       </div>
     );
