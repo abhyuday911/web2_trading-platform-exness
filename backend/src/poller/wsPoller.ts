@@ -38,13 +38,16 @@ ws.onmessage = (event) => {
     const wsPayload = {
       symbol: trade.s,
       bid: trade.p,
-      ask: Number(Number(trade.p) + Number((trade.p * 0.01).toFixed(2))).toFixed(2),
+      ask: Number(
+        Number(trade.p) + Number((trade.p * 0.01).toFixed(2))
+      ).toFixed(2),
       qty: trade.q,
-      time: trade.T
-    }
+      time: trade.T,
+    };
 
     redis.publish("trades", JSON.stringify(wsPayload));
     redis.rpush("trades_queue", JSON.stringify(payload));
+    redis.set(`${trade.s}:latestPrice`, Number(trade.p));
   } catch (err) {
     console.error("Failed to parse trade:", err);
   }
