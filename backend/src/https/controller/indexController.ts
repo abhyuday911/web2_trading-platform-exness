@@ -5,13 +5,13 @@ import jwt, { decode, type JwtPayload } from "jsonwebtoken";
 import type { AuthRequest } from "../middleware/isLoggedIn";
 import Redis from "ioredis";
 const bcrypt = require("bcrypt");
-const redis = new Redis({ host: "127.0.0.1", port: 6379 });
+const redis = new Redis(6370);
 
 const JWT_KEY = process.env.JWT_KEY || "whatsUpHomie";
 const client = await connectDB();
 
-interface MyJwtPayload extends JwtPayload{
-  email: string
+interface MyJwtPayload extends JwtPayload {
+  email: string;
 }
 
 interface Balance {
@@ -29,7 +29,6 @@ interface Position {
   stoploss?: number;
   takeProfit?: number;
 }
-
 
 class User {
   email: string;
@@ -169,16 +168,15 @@ export const getCandles = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   const token = req.cookies.token;
-  if (!token) res.json("user not loggedin");
+  if (!token) return res.json("user not loggedin");
 
   try {
     const decoded = jwt.verify(token, JWT_KEY) as MyJwtPayload;
-    const user = Users.get(decoded.email)
-    
-    if(!user) {
-      return res.status(401).json({message: "session invalid log-in again"})
-    }
+    const user = Users.get(decoded.email);
 
+    if (!user) {
+      return res.status(401).json({ message: "session invalid log-in again" });
+    }
 
     return res.json(user);
   } catch (error) {

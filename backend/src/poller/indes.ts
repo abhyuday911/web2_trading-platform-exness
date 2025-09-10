@@ -1,9 +1,6 @@
 import Redis from "ioredis";
 
-const redis = new Redis({
-  host: "127.0.0.1",
-  port: 6379,
-});
+const redis = new Redis(6370);
 const symbol = "btcusdt";
 const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@trade`);
 

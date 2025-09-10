@@ -1,10 +1,7 @@
 import { WebSocketServer } from "ws";
 import Redis from "ioredis";
 
-const sub = new Redis({
-  host: "127.0.0.1",
-  port: 6379,
-});
+const sub = new Redis(6370);
 const wss = new WebSocketServer({ port: 8080 });
 
 wss.on("connection", (ws) => console.log("web socket server connected"));

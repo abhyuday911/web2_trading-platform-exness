@@ -2,7 +2,7 @@ import Redis from "ioredis";
 import { connectDB } from "./db/client";
 
 // --- Redis connection ---
-const redis = new Redis(); // default: localhost:6379
+const redis = new Redis(6370); // default: localhost:6379
 
 // --- Process trades from Redis queue ---
 async function processQueue() {
