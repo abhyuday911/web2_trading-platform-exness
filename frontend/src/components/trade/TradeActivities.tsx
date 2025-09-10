@@ -22,14 +22,14 @@ const TradeActivities = () => {
 
   return (
     <div className="flex flex-col w-1/3 h-full rounded-sm overflow-hidden gap-2">
-      <div className="w-full p-2 bg-neutral-900 flex items-end justify-end gap-2">
+      <div className="w-full p-2 bg-neutral-900 flex items-end justify-end gap-2 border border-zinc-800 rounded-lg shadow-sm"> 
         <User />
       </div>
-      <div className="w-full p-2 mb-1 bg-neutral-900">
-        {latestTrade && <Instruments latestTrade={latestTrade} />}
+      <div className="w-full p-2 mb-1 bg-neutral-900 border border-zinc-800 rounded-lg shadow-sm">
+        <Instruments latestTrade={latestTrade} />
       </div>
-      <div className="h-full w-full bg-neutral-900">
-        <BuySell latestTrade={latestTrade}/>
+      <div className="h-full w-full bg-neutral-900 border border-zinc-800 rounded-lg shadow-sm">
+        <BuySell latestTrade={latestTrade} />
       </div>
     </div>
   );

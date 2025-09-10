@@ -11,7 +11,7 @@ import {
 } from "../ui/table";
 
 type InstrumentProps = {
-  latestTrade: Trade;
+  latestTrade: Trade | undefined;
 };
 
 const Instruments = ({ latestTrade }: InstrumentProps) => {
@@ -30,26 +30,30 @@ const Instruments = ({ latestTrade }: InstrumentProps) => {
             {latestTrade?.symbol || "connection NA"}
           </TableCell>
           <TableCell className="w-1/3">
-            {Number(latestTrade?.bid) || "connection NA"}
+            {Number(latestTrade?.bid).toLocaleString() || "connection NA"}
           </TableCell>
           <TableCell className="w-1/3">
-            {Number(latestTrade?.ask) || "connection NA"}
+            {Number(latestTrade?.ask).toLocaleString() || "connection NA"}
           </TableCell>
         </TableRow>
 
         <TableRow>
           <TableCell className="w-1/3">{"Eth"}</TableCell>
           <TableCell className="w-1/3">
-            {(
-              Number(latestTrade?.bid) / 20 +
-              Math.floor(Math.random() * 10)
-            ).toFixed(2) || "connection NA"}
+            {Number(
+              Number(latestTrade?.bid) / 20 + Math.floor(Math.random() * 10)
+            ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) || "connection NA"}
           </TableCell>
           <TableCell className="w-1/3">
-            {(
-              Number(latestTrade?.ask) / 20 +
-              Math.floor(Math.random() * 10)
-            ).toFixed(2) || "connection NA"}
+            {Number(
+              Number(latestTrade?.ask) / 20 + Math.floor(Math.random() * 10)
+            ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) || "connection NA"}
           </TableCell>
         </TableRow>
       </TableBody>

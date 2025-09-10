@@ -28,7 +28,7 @@ const User = () => {
   if (loggedInUser) {
     return (
       <div className="flex w-full justify-between p-2">
-        <h1 className="text-green-600">USD: {loggedInUser.balance.usd}</h1>
+        <h1 className="text-green-600">USD: {loggedInUser.balance.usd.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</h1>
         <h1>{loggedInUser.email}</h1>
       </div>
     );
